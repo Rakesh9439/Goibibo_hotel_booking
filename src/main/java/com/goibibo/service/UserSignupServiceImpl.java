@@ -4,6 +4,7 @@ import com.goibibo.dto.LoginDto;
 import com.goibibo.dto.UserSignupDto;
 import com.goibibo.entity.UserSignup;
 import com.goibibo.repository.UserSignupRepository;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -27,7 +28,7 @@ public class UserSignupServiceImpl implements UserSignupService{
         userSignup.setLastName(userSignupDto.getLastName());
         userSignup.setUsername(userSignupDto.getUsername());
         userSignup.setEmail(userSignupDto.getEmail());
-        userSignup.setPassword(userSignupDto.getPassword());
+        userSignup.setPassword(BCrypt.hashpw(userSignupDto.getPassword(), BCrypt.gensalt(10)));
         userSignup.setCountry(userSignupDto.getCountry());
         userSignup.setCity(userSignupDto.getCity());
         userSignup.setAddress(userSignupDto.getAddress());
