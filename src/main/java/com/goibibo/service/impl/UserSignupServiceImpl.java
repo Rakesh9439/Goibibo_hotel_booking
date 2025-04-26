@@ -1,16 +1,17 @@
-package com.goibibo.service;
+package com.goibibo.service.impl;
 
 import com.goibibo.dto.LoginDto;
 import com.goibibo.dto.UserSignupDto;
 import com.goibibo.entity.UserSignup;
 import com.goibibo.repository.UserSignupRepository;
+import com.goibibo.service.UserSignupService;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
-public class UserSignupServiceImpl implements UserSignupService{
+public class UserSignupServiceImpl implements UserSignupService {
     
     
     private UserSignupRepository userSignupRepository;
