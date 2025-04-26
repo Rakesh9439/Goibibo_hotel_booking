@@ -1,9 +1,12 @@
 package com.goibibo.service;
 
+import com.goibibo.dto.LoginDto;
 import com.goibibo.dto.UserSignupDto;
 import com.goibibo.entity.UserSignup;
 import com.goibibo.repository.UserSignupRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class UserSignupServiceImpl implements UserSignupService{
@@ -38,4 +41,28 @@ public class UserSignupServiceImpl implements UserSignupService{
     }
 
 
-}
+        // Login verving
+        public String verifyLogin(LoginDto loginDto){
+            Optional<UserSignup> opSuser = userSignupRepository.findByUsername(loginDto.getUsername());
+            if (opSuser.isPresent()) {
+                UserSignup userSignup = opSuser.get();
+
+                // Compare passwords
+                if (userSignup.getPassword().equals(loginDto.getPassword())) {
+                    return "✅ User logged in successfully!";
+                } else {
+                    return "❌ Incorrect password!";
+                }
+            }else {
+                return "❌ Username not found!";
+            }
+
+
+
+            }
+
+
+        }
+
+
+
