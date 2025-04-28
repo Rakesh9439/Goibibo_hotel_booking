@@ -4,10 +4,12 @@ import com.goibibo.dto.LoginDto;
 import com.goibibo.dto.UserSignupDto;
 import com.goibibo.entity.UserSignup;
 import com.goibibo.repository.UserSignupRepository;
+import com.goibibo.service.JWTService;
 import com.goibibo.service.UserSignupService;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
+import javax.naming.AuthenticationException;
 import java.util.Optional;
 
 @Service
@@ -15,9 +17,11 @@ public class UserSignupServiceImpl implements UserSignupService {
     
     
     private UserSignupRepository userSignupRepository;
+    private JWTService jwtService;
 
-    public UserSignupServiceImpl(UserSignupRepository userSignupRepository) {
+    public UserSignupServiceImpl(UserSignupRepository userSignupRepository, JWTService jwtService) {
         this.userSignupRepository = userSignupRepository;
+        this.jwtService = jwtService;
     }
 
     @Override
@@ -35,6 +39,7 @@ public class UserSignupServiceImpl implements UserSignupService {
         userSignup.setAddress(userSignupDto.getAddress());
         userSignup.setPostalCode(userSignupDto.getPostalCode());
         userSignup.setPhone(userSignupDto.getPhone());
+        userSignup.setUserRole(userSignupDto.getUserRole());
 
         //   Save the user signup entity
         UserSignup savedUserSignup = userSignupRepository.save(userSignup);
@@ -42,27 +47,18 @@ public class UserSignupServiceImpl implements UserSignupService {
 
     }
 
+    @Override
 
-        // Login verving
-        public String verifyLogin(LoginDto loginDto){
-            Optional<UserSignup> opSuser = userSignupRepository.findByUsername(loginDto.getUsername());
-            if (opSuser.isPresent()) {
-                UserSignup userSignup = opSuser.get();
-
-                // Compare passwords
-                if (userSignup.getPassword().equals(loginDto.getPassword())) {
-                    return "✅ User logged in successfully!";
-                } else {
-                    return "❌ Incorrect password!";
-                }
-            }else {
-                return "❌ Username not found!";
+    public String verifyLogin(LoginDto loginDto) {
+        Optional<UserSignup> opUser = userSignupRepository.findByUsername(loginDto.getUsername());
+        if (opUser.isPresent()){
+            UserSignup userSignup = opUser.get();
+            if (BCrypt.checkpw(loginDto.getPassword(), userSignup.getPassword())){
+                return jwtService.generateToken(userSignup);
             }
-
-
-
-            }
-
+        }
+        return null;
+    }
 
         }
 

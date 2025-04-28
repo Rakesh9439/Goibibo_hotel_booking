@@ -32,6 +32,8 @@ public class UserSignupDto {
 
     private String postalCode;
 
+    private String userRole;
+
     public Long getId() {
         return id;
     }
@@ -118,5 +120,13 @@ public class UserSignupDto {
 
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
+    }
+
+    public String getUserRole() {
+        return userRole;
+    }
+
+    public void setUserRole(String userRole) {
+        this.userRole = userRole;
     }
 }

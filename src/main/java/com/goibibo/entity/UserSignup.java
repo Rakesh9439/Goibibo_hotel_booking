@@ -48,6 +48,8 @@ public class UserSignup {
     @Column(name = "postal_code", nullable = false)
     private String postalCode;
 
+    @Column(name = "user_role", nullable = false, length = 155)
+    private String userRole;
 
     public Long getId() {
         return id;
@@ -135,5 +137,13 @@ public class UserSignup {
 
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
+    }
+
+    public String getUserRole() {
+        return userRole;
+    }
+
+    public void setUserRole(String userRole) {
+        this.userRole = userRole;
     }
 }

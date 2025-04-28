@@ -2,6 +2,7 @@ package com.goibibo.controller;
 
 
 import com.goibibo.dto.LoginDto;
+import com.goibibo.dto.TokenResponse;
 import com.goibibo.dto.UserSignupDto;
 import com.goibibo.entity.UserSignup;
 import com.goibibo.service.UserSignupService;
@@ -28,18 +29,26 @@ public class UserSignupController {
     // Base URL: localhost:8082/api/signup
 
     @PostMapping("/signup")
-    public ResponseEntity<UserSignup> signupUser(@RequestBody UserSignupDto userSignupDto) {
+    public ResponseEntity<String> signupUser(@RequestBody UserSignupDto userSignupDto) {
         UserSignup savedUser = userSignupService.createUserSignup(userSignupDto);
-        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);  // 201 CREATED
+       if (savedUser!= null){
+           return new ResponseEntity<>("Registration is successful", HttpStatus.CREATED);
+       }
+       return new ResponseEntity<>("Something went wrong", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 
 
 
     @PostMapping("/login")
-    public ResponseEntity<String> verifyLogin(@RequestBody LoginDto loginDto) {
-        String message = userSignupService.verifyLogin(loginDto);
-        return ResponseEntity.ok(message);  // Always returning 200 OK with message
+    public ResponseEntity<?> login(@RequestBody LoginDto loginDto) {
+        String token = userSignupService.verifyLogin(loginDto);
+        if (token!= null){
+            TokenResponse tokenResponse = new TokenResponse();
+            tokenResponse.setToken(token);
+            return new ResponseEntity<>(tokenResponse, HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Invalid crdentials", HttpStatus.UNAUTHORIZED);
     }
 
-}
+    }
