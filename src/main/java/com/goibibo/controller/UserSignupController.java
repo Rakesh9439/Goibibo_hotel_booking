@@ -8,10 +8,9 @@ import com.goibibo.entity.UserSignup;
 import com.goibibo.service.UserSignupService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -26,7 +25,7 @@ public class UserSignupController {
     }
 
     // Endpoint for user signup
-    // Base URL: localhost:8082/api/signup
+    // Base URL: localhost:8082/api/v1/signup
 
     @PostMapping("/signup")
     public ResponseEntity<String> signupUser(@RequestBody UserSignupDto userSignupDto) {
@@ -36,6 +35,26 @@ public class UserSignupController {
        }
        return new ResponseEntity<>("Something went wrong", HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+
+
+
+    // Base URL: localhost:8082/api/v1/signup/getAllUserSignup
+
+    @GetMapping("/getAllUserSignup")
+    public ResponseEntity<List<UserSignupDto>> getAllUserSignup() {
+        List<UserSignupDto> allUserSignup = userSignupService.getAllUserSignup();
+        return new ResponseEntity<>(allUserSignup, HttpStatus.OK);
+    }
+
+
+
+          //      localhost:8082/api/v1/{id}/getAllUserSignup
+        @GetMapping("/{id}/getAllUserSignupById")
+     public ResponseEntity<UserSignupDto> getUserSignupById(@PathVariable Long id){
+         UserSignupDto userSignupById = userSignupService.getUserSignupById(id);
+                    return new ResponseEntity<>(userSignupById, HttpStatus.OK);
+     }
 
 
 

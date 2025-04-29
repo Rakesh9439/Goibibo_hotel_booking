@@ -34,5 +34,7 @@ build/
 
 # .gitignore
 application.yml
+
+# .gitignore
 application.properties
 
